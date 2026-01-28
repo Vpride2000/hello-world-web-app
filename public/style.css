@@ -41,23 +41,36 @@ body {
 .header {
     grid-column: 1 / -1;
     background: white;
-    padding: 40px;
+    padding: 24px;
     border-radius: 2px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.company-logo {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+}
+
 .header h1 {
     color: #1976d2;
-    font-size: 2.125rem;
+    font-size: 1.75rem;
     font-weight: 500;
     letter-spacing: 0.02em;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .header p {
     color: #757575;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 400;
     letter-spacing: 0.01em;
 }
@@ -76,7 +89,7 @@ body {
 
 .main-content h2 {
     color: #212121;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
     border-bottom: none;
     padding-bottom: 0;
     font-size: 1.5rem;
@@ -93,13 +106,13 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 24px 0;
-    font-size: 0.95rem;
+    margin: 12px 0;
+    font-size: 0.85rem;
 }
 
 th, td {
     border: 1px solid #e0e0e0;
-    padding: 16px;
+    padding: 8px 12px;
     text-align: left;
 }
 
@@ -135,14 +148,14 @@ td input:focus {
 }
 
 .table-buttons {
-    margin-top: 24px;
+    margin-top: 12px;
     display: flex;
-    gap: 12px;
+    gap: 8px;
 }
 
 button {
-    padding: 10px 24px;
-    font-size: 0.9375rem;
+    padding: 8px 16px;
+    font-size: 0.875rem;
     border: none;
     border-radius: 2px;
     cursor: pointer;
@@ -334,6 +347,35 @@ button {
 .map-info p {
     color: #616161;
     line-height: 1.6;
+}
+
+.cities-list {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.city-btn {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.city-btn:hover {
+    background: #1565c0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.city-btn:active {
+    background: #0d47a1;
 }
 
 @media (max-width: 768px) {
