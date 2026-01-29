@@ -4,25 +4,18 @@ let originalData = [];
 function enableEdit() {
     isEditMode = true;
     const table = document.getElementById('dataTable');
-    const rows = table.querySelectorAll('tbody tr');
+    const cells = table.querySelectorAll('tbody td');
     
     // Save original data
-    originalData = [];
+    originalData = Array.from(cells).map(cell => cell.textContent);
     
-    // Convert cells in columns 2-7 to input fields (indices 1-6)
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        // Process columns 2-7 (indices 1-6)
-        for (let i = 1; i <= 6; i++) {
-            if (cells[i]) {
-                originalData.push(cells[i].textContent);
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = cells[i].textContent;
-                cells[i].textContent = '';
-                cells[i].appendChild(input);
-            }
-        }
+    // Convert cells to input fields
+    cells.forEach(cell => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = cell.textContent;
+        cell.textContent = '';
+        cell.appendChild(input);
     });
     
     // Toggle buttons visibility
@@ -33,19 +26,14 @@ function enableEdit() {
 
 function saveChanges() {
     const table = document.getElementById('dataTable');
-    const rows = table.querySelectorAll('tbody tr');
+    const cells = table.querySelectorAll('tbody td');
     
-    // Convert inputs back to text (only in columns 2-7)
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        for (let i = 1; i <= 6; i++) {
-            if (cells[i]) {
-                const input = cells[i].querySelector('input');
-                if (input) {
-                    const value = input.value;
-                    cells[i].textContent = value;
-                }
-            }
+    // Convert inputs back to text
+    cells.forEach(cell => {
+        const input = cell.querySelector('input');
+        if (input) {
+            const value = input.value;
+            cell.textContent = value;
         }
     });
     
@@ -62,18 +50,11 @@ function saveChanges() {
 
 function cancelEdit() {
     const table = document.getElementById('dataTable');
-    const rows = table.querySelectorAll('tbody tr');
+    const cells = table.querySelectorAll('tbody td');
     
-    // Restore original data (only in columns 2-7)
-    let dataIndex = 0;
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        for (let i = 1; i <= 6; i++) {
-            if (cells[i] && dataIndex < originalData.length) {
-                cells[i].textContent = originalData[dataIndex];
-                dataIndex++;
-            }
-        }
+    // Restore original data
+    cells.forEach((cell, index) => {
+        cell.textContent = originalData[index];
     });
     
     isEditMode = false;
@@ -128,8 +109,7 @@ function initMap() {
     L.marker(russiaCenter).addTo(map)
         .bindPopup('<b>Центр России</b><br/>Россия')
         .openPopup();
-    
-    // Add markers for Tyumen and Ekaterinburg
+            // Add markers for Tyumen and Ekaterinburg
     const tyumenCoords = [57.1522, 65.5272];
     L.marker(tyumenCoords).addTo(map)
         .bindPopup('<b>Тюмень</b><br/>Россия');
@@ -137,6 +117,7 @@ function initMap() {
     const ekaterinburgCoords = [56.8389, 60.6057];
     L.marker(ekaterinburgCoords).addTo(map)
         .bindPopup('<b>Екатеринбург</b><br/>Россия');
+    
     
     window.mapInitialized = true;
 }
