@@ -97,7 +97,10 @@ function initMap() {
     
     // Create map
     const map = L.map('map').setView(russiaCenter, 4);
+<<<<<<<<< Temporary merge branch 1
+=========
     window.mapObject = map;
+>>>>>>>>> Temporary merge branch 2
     
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -109,7 +112,13 @@ function initMap() {
     L.marker(russiaCenter).addTo(map)
         .bindPopup('<b>Центр России</b><br/>Россия')
         .openPopup();
-            // Add markers for Tyumen and Ekaterinburg
+    
+<<<<<<<<< Temporary merge branch 1
+    window.mapInitialized = true;
+}
+
+=========
+    // Add markers for Tyumen and Ekaterinburg
     const tyumenCoords = [57.1522, 65.5272];
     L.marker(tyumenCoords).addTo(map)
         .bindPopup('<b>Тюмень</b><br/>Россия');
@@ -117,7 +126,6 @@ function initMap() {
     const ekaterinburgCoords = [56.8389, 60.6057];
     L.marker(ekaterinburgCoords).addTo(map)
         .bindPopup('<b>Екатеринбург</b><br/>Россия');
-    
     
     window.mapInitialized = true;
 }
@@ -133,6 +141,7 @@ function goToCity(cityId, lat, lng, zoomLevel = 10) {
     window.mapObject.setView([lat, lng], zoomLevel);
 }
 
+>>>>>>>>> Temporary merge branch 2
 function updateDate() {
     const options = {
         weekday: 'long',
