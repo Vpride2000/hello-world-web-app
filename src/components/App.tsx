@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import StatisticsPage from './pages/StatisticsPage';
+import UslugiSvyazi from './pages/UslugiSvyazi';
 import ZakupPage from './pages/ZakupPage';
 import OptionsPage from './pages/OptionsPage';
 import MapPage from './pages/MapPage';
@@ -30,7 +30,7 @@ const App: React.FC = () => {
       <Header />
       <Sidebar activePage={activePage} onPageChange={handlePageChange} />
       <div className="main-content">
-        {activePage === 'statistics' && <StatisticsPage />}
+        {activePage === 'statistics' && <UslugiSvyazi />}
         {activePage === 'ZAKUP' && <ZakupPage />}
         {activePage === 'options' && <OptionsPage />}
         {activePage === 'map' && <MapPage />}
