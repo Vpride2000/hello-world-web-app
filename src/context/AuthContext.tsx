@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode, useContext } from 'react';
 
-export type SectionId = 'statistics' | 'ZAKUP' | 'options' | 'map' | 'help';
+export type SectionId = 'statistics' | 'ZAKUP' | 'options' | 'map' | 'help' | 'dogovory';
 export type AccessLevel = 'view' | 'edit' | 'hidden';
 
 export interface UserPermission {
@@ -34,8 +34,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const defaultAdminUser: User = {
   id: 'admin-1',
-  username: 'АДМ',
-  password: '123',
+  username: process.env.REACT_APP_DEFAULT_ADMIN_USERNAME || 'АДМ',
+  password: process.env.REACT_APP_DEFAULT_ADMIN_PASSWORD || '123',
   role: 'АДМ',
   permissions: [
     { section: 'statistics', level: 'edit' },
@@ -43,6 +43,7 @@ const defaultAdminUser: User = {
     { section: 'options', level: 'edit' },
     { section: 'map', level: 'edit' },
     { section: 'help', level: 'edit' },
+    { section: 'dogovory', level: 'edit' },
   ],
 };
 

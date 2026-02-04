@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 
-type PageId = 'statistics' | 'statistics-us741' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'options' | 'map' | 'help' | 'admin';
+type PageId = 'home' | 'statistics' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
 
 interface SidebarProps {
   activePage: PageId;
@@ -13,6 +13,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
 
   return (
     <div className="sidebar">
+      <button
+        className={`sidebar-nav-btn ${activePage === 'home' ? 'active' : ''}`}
+        onClick={() => onPageChange('home')}
+      >
+        Главная страница
+      </button>
+
       {isSectionVisible('statistics') && (
         <>
           <button 
@@ -26,6 +33,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
             onClick={() => onPageChange('statistics-us741')}
           >
             └ Услуги связи УС741
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'statistics-forecasts' ? 'active' : ''}`}
+            onClick={() => onPageChange('statistics-forecasts')}
+          >
+            └ Прогнозы
           </button>
         </>
       )}
@@ -59,13 +72,30 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
         </>
       )}
       
-      {isSectionVisible('options') && (
+      {isSectionVisible('dogovory') && (
         <button 
-          className={`sidebar-nav-btn ${activePage === 'options' ? 'active' : ''}`}
-          onClick={() => onPageChange('options')}
+          className={`sidebar-nav-btn ${activePage === 'dogovory' ? 'active' : ''}`}
+          onClick={() => onPageChange('dogovory')}
         >
-          Сотовая связь
+          Договора
         </button>
+      )}
+      
+      {isSectionVisible('options') && (
+        <>
+          <button 
+            className={`sidebar-nav-btn ${activePage === 'options' ? 'active' : ''}`}
+            onClick={() => onPageChange('options')}
+          >
+            Сотовая связь
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'options-tariffs' ? 'active' : ''}`}
+            onClick={() => onPageChange('options-tariffs')}
+          >
+            └ Тарифы
+          </button>
+        </>
       )}
       
       {isSectionVisible('map') && (
@@ -78,13 +108,21 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
       )}
       
       {isSectionVisible('help') && (
-        <button 
-          className={`sidebar-nav-btn ${activePage === 'help' ? 'active' : ''}`}
-          onClick={() => onPageChange('help')}
-        >
-          Спутниковая связь
-        </button>
-      )}
+          <>
+            <button 
+              className={`sidebar-nav-btn ${activePage === 'help' ? 'active' : ''}`}
+              onClick={() => onPageChange('help')}
+            >
+              Спутниковая связь
+            </button>
+            <button
+              className={`sidebar-sub-btn ${activePage === 'help-iridium' ? 'active' : ''}`}
+              onClick={() => onPageChange('help-iridium')}
+            >
+              └ Иридиум
+            </button>
+          </>
+        )}
 
       {currentUser?.role === 'АДМ' && (
         <button 

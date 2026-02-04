@@ -1,5 +1,15 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+require('dotenv').config();
+
+// Создаём объект переменных окружения для DefinePlugin
+const envVariables = {};
+Object.keys(process.env).forEach(key => {
+  if (key.startsWith('REACT_APP_')) {
+    envVariables[`process.env.${key}`] = JSON.stringify(process.env[key]);
+  }
+});
 
 module.exports = {
   entry: './src/index.tsx',
@@ -24,6 +34,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.DefinePlugin(envVariables),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),

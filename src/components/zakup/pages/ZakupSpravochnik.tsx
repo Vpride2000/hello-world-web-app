@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 
 interface TableData {
   [key: string]: string;
@@ -7,8 +7,12 @@ interface TableData {
 
 const ZakupSpravochnik: React.FC = () => {
   const { canAccess } = useAuth();
-  const STORAGE_KEY = 'spravochnikSuppliers';
+  const STORAGE_KEY = process.env.REACT_APP_STORAGE_KEY_SUPPLIERS || 'spravochnikSuppliers';
+  const COUNTERPARTIES_KEY = process.env.REACT_APP_STORAGE_KEY_COUNTERPARTIES || 'spravochnikCounterparties';
+  const CONTRACTS_KEY = process.env.REACT_APP_STORAGE_KEY_CONTRACTS || 'spravochnikContracts';
   const DEFAULT_SUPPLIERS = ['Поставщик А', 'Поставщик Б', 'Поставщик В', 'Поставщик Г', 'Поставщик Д'];
+  const DEFAULT_COUNTERPARTIES = ['Контрагент 1', 'Контрагент 2', 'Контрагент 3', 'Контрагент 4', 'Контрагент 5'];
+  const DEFAULT_CONTRACTS = ['Договор 001', 'Договор 002', 'Договор 003', 'Договор 004', 'Договор 005'];
   const canEdit = canAccess('statistics', 'edit');
   const [isEditMode, setIsEditMode] = useState(false);
   const [originalData, setOriginalData] = useState<{
@@ -20,20 +24,12 @@ const ZakupSpravochnik: React.FC = () => {
   const [spravochnikData, setSpravochnikData] = useState<TableData[]>(
     DEFAULT_SUPPLIERS.map((name) => ({ col0: name }))
   );
-  const [counterpartiesData, setCounterpartiesData] = useState<TableData[]>([
-    { col0: 'Контрагент 1' },
-    { col0: 'Контрагент 2' },
-    { col0: 'Контрагент 3' },
-    { col0: 'Контрагент 4' },
-    { col0: 'Контрагент 5' },
-  ]);
-  const [contractsData, setContractsData] = useState<TableData[]>([
-    { col0: 'Договор 001' },
-    { col0: 'Договор 002' },
-    { col0: 'Договор 003' },
-    { col0: 'Договор 004' },
-    { col0: 'Договор 005' },
-  ]);
+  const [counterpartiesData, setCounterpartiesData] = useState<TableData[]>(
+    DEFAULT_COUNTERPARTIES.map((name) => ({ col0: name }))
+  );
+  const [contractsData, setContractsData] = useState<TableData[]>(
+    DEFAULT_CONTRACTS.map((name) => ({ col0: name }))
+  );
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -48,6 +44,34 @@ const ZakupSpravochnik: React.FC = () => {
       }
     } else {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SUPPLIERS));
+    }
+
+    const storedCounterparties = localStorage.getItem(COUNTERPARTIES_KEY);
+    if (storedCounterparties) {
+      try {
+        const list = JSON.parse(storedCounterparties) as string[];
+        if (Array.isArray(list)) {
+          setCounterpartiesData(list.map((name) => ({ col0: name })));
+        }
+      } catch {
+        // ignore invalid storage
+      }
+    } else {
+      localStorage.setItem(COUNTERPARTIES_KEY, JSON.stringify(DEFAULT_COUNTERPARTIES));
+    }
+
+    const storedContracts = localStorage.getItem(CONTRACTS_KEY);
+    if (storedContracts) {
+      try {
+        const list = JSON.parse(storedContracts) as string[];
+        if (Array.isArray(list)) {
+          setContractsData(list.map((name) => ({ col0: name })));
+        }
+      } catch {
+        // ignore invalid storage
+      }
+    } else {
+      localStorage.setItem(CONTRACTS_KEY, JSON.stringify(DEFAULT_CONTRACTS));
     }
   }, []);
 
@@ -65,7 +89,17 @@ const ZakupSpravochnik: React.FC = () => {
     const suppliers = spravochnikData
       .map((row) => row.col0?.trim())
       .filter((name) => Boolean(name)) as string[];
+    const counterparties = counterpartiesData
+      .map((row) => row.col0?.trim())
+      .filter((name) => Boolean(name)) as string[];
+    const contracts = contractsData
+      .map((row) => row.col0?.trim())
+      .filter((name) => Boolean(name)) as string[];
+    
     localStorage.setItem(STORAGE_KEY, JSON.stringify(suppliers));
+    localStorage.setItem(COUNTERPARTIES_KEY, JSON.stringify(counterparties));
+    localStorage.setItem(CONTRACTS_KEY, JSON.stringify(contracts));
+    
     window.dispatchEvent(new Event('spravochnik-updated'));
     alert('✅ Данные успешно сохранены!');
   };

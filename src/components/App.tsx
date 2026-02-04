@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import UslugiSvyazi from './pages/UslugiSvyazi';
-import UslugiSvyaziUs741 from './pages/UslugiSvyaziUs741';
-import ZakupPage from './pages/ZakupPage';
-import ZakupOnm from './pages/ZakupOnm';
-import ZakupPen from './pages/ZakupPen';
-import ZakupSpravochnik from './pages/ZakupSpravochnik';
-import OptionsPage from './pages/OptionsPage';
-import MapPage from './pages/MapPage';
-import HelpPage from './pages/HelpPage';
-import AdminPanel from './pages/AdminPanel';
+import UslugiSvyazi from './statistics/pages/UslugiSvyazi';
+import UslugiSvyaziUs741 from './statistics/pages/UslugiSvyaziUs741';
+import ForecastsPage from './statistics/pages/ForecastsPage';
+import ZakupPage from './zakup/pages/ZakupPage';
+import ZakupOnm from './zakup/pages/ZakupOnm';
+import ZakupPen from './zakup/pages/ZakupPen';
+import ZakupSpravochnik from './zakup/pages/ZakupSpravochnik';
+import OptionsPage from './options/pages/OptionsPage';
+import TariffsPage from './options/pages/TariffsPage';
+import MapPage from './map/pages/MapPage';
+import HelpPage from './help/pages/HelpPage';
+import IridiumPage from './help/pages/IridiumPage';
+import DogovorPage from './dogovory/pages/DogovorPage';
+import AdminPanel from './admin/pages/AdminPanel';
 import LoginPage from './LoginPage';
 import { useAuth } from '../context/AuthContext';
 import '../styles/style.css';
+import HomePage from './HomePage';
 
-type PageId = 'statistics' | 'statistics-us741' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'options' | 'map' | 'help' | 'admin';
+type PageId = 'home' | 'statistics' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [activePage, setActivePage] = useState<PageId>('statistics');
+  const [activePage, setActivePage] = useState<PageId>('home');
 
   const handlePageChange = (pageId: PageId) => {
     setActivePage(pageId);
@@ -34,15 +39,20 @@ const App: React.FC = () => {
       <Header />
       <Sidebar activePage={activePage} onPageChange={handlePageChange} />
       <div className="main-content">
+        {activePage === 'home' && <HomePage />}
         {activePage === 'statistics' && <UslugiSvyazi />}
         {activePage === 'statistics-us741' && <UslugiSvyaziUs741 />}
+        {activePage === 'statistics-forecasts' && <ForecastsPage />}
         {activePage === 'ZAKUP' && <ZakupPage />}
         {activePage === 'zakup-onm' && <ZakupOnm />}
         {activePage === 'zakup-pen' && <ZakupPen />}
         {activePage === 'zakup-spravochnik' && <ZakupSpravochnik />}
+        {activePage === 'dogovory' && <DogovorPage />}
         {activePage === 'options' && <OptionsPage />}
+        {activePage === 'options-tariffs' && <TariffsPage />}
         {activePage === 'map' && <MapPage />}
         {activePage === 'help' && <HelpPage />}
+        {activePage === 'help-iridium' && <IridiumPage />}
         {activePage === 'admin' && <AdminPanel />}
       </div>
     </div>

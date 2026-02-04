@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ReactGrid, Column, Row, CellChange, TextCell } from '@silevis/reactgrid';
 import '@silevis/reactgrid/styles.css';
 import * as XLSX from 'xlsx';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 import './UslugiSvyaziUs741.css';
 
 interface GridData {

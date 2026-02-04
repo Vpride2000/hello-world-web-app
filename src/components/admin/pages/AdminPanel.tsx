@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth, SectionId, AccessLevel, UserPermission, User } from '../../context/AuthContext';
+import { useAuth, SectionId, AccessLevel, UserPermission, User } from '../../../context/AuthContext';
 import './AdminPanel.css';
 
 const AdminPanel: React.FC = () => {
@@ -11,13 +11,14 @@ const AdminPanel: React.FC = () => {
   const [editingPassword, setEditingPassword] = useState<string | null>(null);
   const [newPasswordInput, setNewPasswordInput] = useState('');
 
-  const sections: SectionId[] = ['statistics', 'ZAKUP', 'options', 'map', 'help'];
+  const sections: SectionId[] = ['statistics', 'ZAKUP', 'options', 'map', 'help', 'dogovory'];
   const sectionNames: Record<SectionId, string> = {
     statistics: 'Услуги связи',
     ZAKUP: 'Закупки',
     options: 'Сотовая связь',
     map: 'Карта объектов',
     help: 'Спутниковая связь',
+    dogovory: 'Договора',
   };
 
   const handleAddUser = (e: React.FormEvent) => {

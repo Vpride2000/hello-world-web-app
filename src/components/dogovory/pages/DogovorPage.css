@@ -1,0 +1,163 @@
+.dogovory-wrapper {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: auto;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  min-height: 400px;
+}
+
+.table-description {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+.dogovory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  display: table;
+}
+
+.dogovory-table thead {
+  background: linear-gradient(135deg, #4CAF50 0%, #388e3c 100%);
+  color: white;
+  font-weight: bold;
+  display: table-header-group;
+}
+
+.dogovory-table th {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 2px solid #2e7d32;
+  font-size: 14px;
+  display: table-cell;
+}
+
+.dogovory-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+  display: table-row;
+}
+
+.dogovory-table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.dogovory-table tbody tr:hover {
+  background-color: #f0f4f8;
+}
+
+.dogovory-table td {
+  padding: 8px;
+  border-right: 1px solid #e0e0e0;
+  display: table-cell;
+}
+
+.dogovory-table td:last-child {
+  border-right: none;
+}
+
+.dogovory-table tbody {
+  display: table-row-group;
+}
+
+.dogovory-table input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.counterparty-select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  box-sizing: border-box;
+  background-color: white;
+  cursor: pointer;
+}
+
+.counterparty-select:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 4px rgba(33, 150, 243, 0.3);
+  background-color: #f5f9ff;
+}
+
+.counterparty-select:disabled {
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: not-allowed;
+  border-color: #ddd;
+}
+
+.dogovory-table input:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 4px rgba(33, 150, 243, 0.3);
+  background-color: #f5f9ff;
+}
+
+.dogovory-table input:disabled {
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: not-allowed;
+  border-color: #ddd;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-save {
+  background-color: #4CAF50;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.btn-action:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.access-denied {
+  padding: 20px;
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+  border-radius: 4px;
+  color: #c62828;
+}

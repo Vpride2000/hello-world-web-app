@@ -7,21 +7,31 @@ const MapPage: React.FC = () => {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [useOnlineMap, setUseOnlineMap] = useState(false);
+  const tileUrl = process.env.REACT_APP_OPENSTREETMAP_TILE_URL || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const attribution = process.env.REACT_APP_OPENSTREETMAP_ATTRIBUTION || '© OpenStreetMap contributors';
+  const maxZoom = parseInt(process.env.REACT_APP_MAP_MAX_ZOOM || '19', 10);
+  const centerLat = parseFloat(process.env.REACT_APP_RUSSIA_CENTER_LAT || '61.5240');
+  const centerLng = parseFloat(process.env.REACT_APP_RUSSIA_CENTER_LNG || '105.3188');
+  const defaultZoom = parseInt(process.env.REACT_APP_DEFAULT_MAP_ZOOM || '4', 10);
+  const tyumenLat = parseFloat(process.env.REACT_APP_TYUMEN_LAT || '57.1522');
+  const tyumenLng = parseFloat(process.env.REACT_APP_TYUMEN_LNG || '65.5272');
+  const ekaterinburgLat = parseFloat(process.env.REACT_APP_EKATERINBURG_LAT || '56.8389');
+  const ekaterinburgLng = parseFloat(process.env.REACT_APP_EKATERINBURG_LNG || '60.6057');
 
   useEffect(() => {
     if (!useOnlineMap || !mapContainerRef.current || mapRef.current) return;
 
     // Coordinates for center of Russia
-    const russiaCenter: [number, number] = [61.5240, 105.3188];
+    const russiaCenter: [number, number] = [centerLat, centerLng];
 
     // Create map
-    const map = L.map(mapContainerRef.current).setView(russiaCenter, 4);
+    const map = L.map(mapContainerRef.current).setView(russiaCenter, defaultZoom);
     mapRef.current = map;
 
     // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19
+    L.tileLayer(tileUrl, {
+      attribution: attribution,
+      maxZoom: maxZoom
     }).addTo(map);
 
     // Add marker at center
@@ -30,11 +40,11 @@ const MapPage: React.FC = () => {
       .openPopup();
 
     // Add markers for Tyumen and Ekaterinburg
-    const tyumenCoords: [number, number] = [57.1522, 65.5272];
+    const tyumenCoords: [number, number] = [tyumenLat, tyumenLng];
     L.marker(tyumenCoords).addTo(map)
       .bindPopup('<b>Тюмень</b><br/>Россия');
 
-    const ekaterinburgCoords: [number, number] = [56.8389, 60.6057];
+    const ekaterinburgCoords: [number, number] = [ekaterinburgLat, ekaterinburgLng];
     L.marker(ekaterinburgCoords).addTo(map)
       .bindPopup('<b>Екатеринбург</b><br/>Россия');
 

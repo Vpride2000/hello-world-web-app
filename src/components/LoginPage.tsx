@@ -7,6 +7,10 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const appName = process.env.REACT_APP_NAME || 'Отдел телекоммуникаций';
+  const logoUrl = process.env.REACT_APP_COMPANY_LOGO_URL || '';
+  const defaultAdminUsername = process.env.REACT_APP_DEFAULT_ADMIN_USERNAME || 'АДМ';
+  const defaultAdminPassword = process.env.REACT_APP_DEFAULT_ADMIN_PASSWORD || '123';
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +35,10 @@ const LoginPage: React.FC = () => {
         <div className="login-header">
           <img 
             className="login-logo" 
-            src="https://yt3.googleusercontent.com/ytc/AIdro_nJBkQs-ezXCzsiOrwrltHYxUyTCVyuZKYcUBcJWMKyuQ=s900-c-k-c0x00ffffff-no-rj" 
+            src={logoUrl}
             alt="Company Logo"
           />
-          <h1>Отдел телекоммуникаций</h1>
+          <h1>{appName}</h1>
         </div>
 
         <form onSubmit={handleLogin}>
@@ -67,8 +71,8 @@ const LoginPage: React.FC = () => {
 
         <div className="login-hint">
           <p><strong>Для тестирования:</strong></p>
-          <p>Логин: <code>АДМ</code></p>
-          <p>Пароль: <code>123</code></p>
+          <p>Логин: <code>{defaultAdminUsername}</code></p>
+          <p>Пароль: <code>{defaultAdminPassword}</code></p>
         </div>
       </div>
     </div>
