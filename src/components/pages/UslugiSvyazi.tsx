@@ -247,6 +247,7 @@ const UslugiSvyazi: React.FC = () => {
       {renderTable('Тюменский газотранспортный филиал (ТГГФ)', tggfData, 'tggf')}
       {renderTable('Омский газотранспортный филиал (ОГГФ)', oggfData, 'oggf')}
       {renderTable('Центральный газотранспортный филиал (ЦГГФ)', cggfData, 'cggf')}
+
     </>
   );
 };

@@ -3,10 +3,13 @@ import { useAuth, SectionId, AccessLevel, UserPermission, User } from '../../con
 import './AdminPanel.css';
 
 const AdminPanel: React.FC = () => {
-  const { users, currentUser, addUser, updateUserPermissions, deleteUser } = useAuth();
+  const { users, currentUser, addUser, updateUserPermissions, updateUserPassword, deleteUser } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [selectedEditUser, setSelectedEditUser] = useState<string | null>(null);
+  const [editingPassword, setEditingPassword] = useState<string | null>(null);
+  const [newPasswordInput, setNewPasswordInput] = useState('');
 
   const sections: SectionId[] = ['statistics', 'ZAKUP', 'options', 'map', 'help'];
   const sectionNames: Record<SectionId, string> = {
@@ -19,14 +22,24 @@ const AdminPanel: React.FC = () => {
 
   const handleAddUser = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newUsername.trim()) {
+    if (newUsername.trim() && newPassword.trim()) {
       const defaultPermissions: UserPermission[] = sections.map(section => ({
         section,
         level: 'view' as AccessLevel,
       }));
-      addUser(newUsername, 'user', defaultPermissions);
+      addUser(newUsername, newPassword, 'user', defaultPermissions);
       setNewUsername('');
+      setNewPassword('');
       setShowAddForm(false);
+    }
+  };
+
+  const handlePasswordUpdate = (userId: string) => {
+    if (newPasswordInput.trim()) {
+      updateUserPassword(userId, newPasswordInput);
+      setEditingPassword(null);
+      setNewPasswordInput('');
+      alert('✅ Пароль успешно изменен!');
     }
   };
 
@@ -68,6 +81,12 @@ const AdminPanel: React.FC = () => {
               >
                 Редактировать права
               </button>
+              <button
+                className="btn-edit-user"
+                onClick={() => setEditingPassword(user.id)}
+              >
+                Сменить пароль
+              </button>
               {user.id !== 'admin-1' && (
                 <button
                   className="btn-delete-user"
@@ -75,6 +94,32 @@ const AdminPanel: React.FC = () => {
                 >
                   Удалить
                 </button>
+              )}
+              {editingPassword === user.id && (
+                <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
+                  <input
+                    type="password"
+                    value={newPasswordInput}
+                    onChange={(e) => setNewPasswordInput(e.target.value)}
+                    placeholder="Новый пароль"
+                    style={{ flex: 1 }}
+                  />
+                  <button
+                    className="btn-add-user"
+                    onClick={() => handlePasswordUpdate(user.id)}
+                  >
+                    Сохранить
+                  </button>
+                  <button
+                    className="btn-cancel"
+                    onClick={() => {
+                      setEditingPassword(null);
+                      setNewPasswordInput('');
+                    }}
+                  >
+                    Отмена
+                  </button>
+                </div>
               )}
             </div>
           ))}
@@ -89,11 +134,22 @@ const AdminPanel: React.FC = () => {
               placeholder="Имя пользователя"
               required
             />
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Пароль"
+              required
+            />
             <button type="submit" className="btn-add-user">Создать</button>
             <button
               type="button"
               className="btn-cancel"
-              onClick={() => setShowAddForm(false)}
+              onClick={() => {
+                setShowAddForm(false);
+                setNewUsername('');
+                setNewPassword('');
+              }}
             >
               Отмена
             </button>
@@ -136,6 +192,7 @@ const AdminPanel: React.FC = () => {
                           >
                             <option value="view">Просмотр</option>
                             <option value="edit">Редактирование</option>
+                            <option value="hidden">Скрыт</option>
                           </select>
                         </td>
                       </tr>

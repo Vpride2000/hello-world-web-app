@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 
-type PageId = 'statistics' | 'ZAKUP' | 'options' | 'map' | 'help' | 'admin';
+type PageId = 'statistics' | 'statistics-us741' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'options' | 'map' | 'help' | 'admin';
 
 interface SidebarProps {
   activePage: PageId;
@@ -9,40 +9,82 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
-  const { logout, currentUser } = useAuth();
+  const { logout, currentUser, isSectionVisible } = useAuth();
 
   return (
     <div className="sidebar">
-      <button 
-        className={`sidebar-nav-btn ${activePage === 'statistics' ? 'active' : ''}`}
-        onClick={() => onPageChange('statistics')}
-      >
-        Услуги связи
-      </button>
-      <button 
-        className={`sidebar-nav-btn ${activePage === 'ZAKUP' ? 'active' : ''}`}
-        onClick={() => onPageChange('ZAKUP')}
-      >
-        Закупки
-      </button>
-      <button 
-        className={`sidebar-nav-btn ${activePage === 'options' ? 'active' : ''}`}
-        onClick={() => onPageChange('options')}
-      >
-        Сотовая связь
-      </button>
-      <button 
-        className={`sidebar-nav-btn ${activePage === 'map' ? 'active' : ''}`}
-        onClick={() => onPageChange('map')}
-      >
-        Карта объектов
-      </button>
-      <button 
-        className={`sidebar-nav-btn ${activePage === 'help' ? 'active' : ''}`}
-        onClick={() => onPageChange('help')}
-      >
-        Спутниковая связь
-      </button>
+      {isSectionVisible('statistics') && (
+        <>
+          <button 
+            className={`sidebar-nav-btn ${activePage === 'statistics' ? 'active' : ''}`}
+            onClick={() => onPageChange('statistics')}
+          >
+            Услуги связи
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'statistics-us741' ? 'active' : ''}`}
+            onClick={() => onPageChange('statistics-us741')}
+          >
+            └ Услуги связи УС741
+          </button>
+        </>
+      )}
+      
+      {isSectionVisible('ZAKUP') && (
+        <>
+          <button 
+            className={`sidebar-nav-btn ${activePage === 'ZAKUP' ? 'active' : ''}`}
+            onClick={() => onPageChange('ZAKUP')}
+          >
+            Закупки
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'zakup-onm' ? 'active' : ''}`}
+            onClick={() => onPageChange('zakup-onm')}
+          >
+            └ ОНМ
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'zakup-pen' ? 'active' : ''}`}
+            onClick={() => onPageChange('zakup-pen')}
+          >
+            └ ПЭН
+          </button>
+          <button 
+            className={`sidebar-nav-btn ${activePage === 'zakup-spravochnik' ? 'active' : ''}`}
+            onClick={() => onPageChange('zakup-spravochnik')}
+          >
+            Справочник
+          </button>
+        </>
+      )}
+      
+      {isSectionVisible('options') && (
+        <button 
+          className={`sidebar-nav-btn ${activePage === 'options' ? 'active' : ''}`}
+          onClick={() => onPageChange('options')}
+        >
+          Сотовая связь
+        </button>
+      )}
+      
+      {isSectionVisible('map') && (
+        <button 
+          className={`sidebar-nav-btn ${activePage === 'map' ? 'active' : ''}`}
+          onClick={() => onPageChange('map')}
+        >
+          Карта объектов
+        </button>
+      )}
+      
+      {isSectionVisible('help') && (
+        <button 
+          className={`sidebar-nav-btn ${activePage === 'help' ? 'active' : ''}`}
+          onClick={() => onPageChange('help')}
+        >
+          Спутниковая связь
+        </button>
+      )}
 
       {currentUser?.role === 'АДМ' && (
         <button 

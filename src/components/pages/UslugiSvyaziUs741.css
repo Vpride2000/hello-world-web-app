@@ -1,0 +1,150 @@
+.budget-planner {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-description {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.grid-wrapper {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
+
+.btn-action {
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-action:active {
+  transform: translateY(0);
+}
+
+.btn-save {
+  background-color: #4CAF50;
+}
+
+.btn-save:hover {
+  background-color: #45a049;
+}
+
+.btn-save:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-export {
+  background-color: #2196F3;
+}
+
+.btn-export:hover {
+  background-color: #0b7dda;
+}
+
+.btn-export-path {
+  background-color: #00BCD4;
+}
+
+.btn-export-path:hover {
+  background-color: #0097a7;
+}
+
+.btn-import {
+  background-color: #FF9800;
+}
+
+.btn-import:hover {
+  background-color: #e68900;
+}
+
+/* Стилизация таблицы ReactGrid */
+.rg {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.rg-header {
+  background: linear-gradient(180deg, #4CAF50 0%, #388e3c 100%);
+  color: white;
+  font-weight: 600;
+  border-bottom: 2px solid #2e7d32;
+}
+
+.rg-header-cell {
+  background: linear-gradient(180deg, #4CAF50 0%, #388e3c 100%);
+  color: white;
+  font-weight: 600;
+  padding: 12px 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rg-row {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.rg-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.rg-row:hover {
+  background-color: #f0f4f8;
+}
+
+.rg-cell {
+  padding: 10px 8px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.rg-cell input,
+.rg-cell textarea {
+  font-size: 13px;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.rg-cell input:focus,
+.rg-cell textarea:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 4px rgba(33, 150, 243, 0.3);
+}
+
+/* Стилизация для отключенных ячеек (итого) */
+.rg-cell[disabled],
+.rg-cell.rg-cell-disabled {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
+  cursor: default;
+}
+
+.access-denied {
+  color: #d32f2f;
+  font-weight: 500;
+  padding: 10px;
+  background-color: #ffebee;
+  border-left: 4px solid #d32f2f;
+  border-radius: 2px;
+}
