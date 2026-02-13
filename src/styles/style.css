@@ -478,6 +478,39 @@ button {
     font-size: 1.2rem;
 }
 
+.rdg-brief-light {
+    background-color: #ffffff;
+    color: #1b1f24;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+
+.rdg-brief-light .rdg-header-row,
+.rdg-brief-light .rdg-header-row .rdg-cell {
+    background-color: #f5f7fb;
+    color: #1f3a8a;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.rdg-brief-light .rdg-row .rdg-cell {
+    background-color: #ffffff;
+    border-right: 1px solid #f0f0f0;
+}
+
+.rdg-brief-light .rdg-row:nth-child(even) .rdg-cell {
+    background-color: #fafafa;
+}
+
+.rdg-brief-light .rdg-row:hover .rdg-cell {
+    background-color: #f0f6ff;
+}
+
+.rdg-brief-light .rdg-cell[aria-selected='true'] {
+    outline: 2px solid #1976d2;
+    outline-offset: -2px;
+}
+
 .summary-table {
     background-color: #e3f2fd;
     padding: 20px;

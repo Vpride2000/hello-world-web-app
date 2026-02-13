@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 
-type PageId = 'home' | 'statistics' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
+type PageId = 'home' | 'statistics' | 'statistics-brief' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
 
 interface SidebarProps {
   activePage: PageId;
@@ -33,6 +33,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
             onClick={() => onPageChange('statistics-us741')}
           >
             └ Услуги связи УС741
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'statistics-brief' ? 'active' : ''}`}
+            onClick={() => onPageChange('statistics-brief')}
+          >
+            └ Кратко
           </button>
           <button
             className={`sidebar-sub-btn ${activePage === 'statistics-forecasts' ? 'active' : ''}`}

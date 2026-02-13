@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import UslugiSvyazi from './statistics/pages/UslugiSvyazi';
+import UslugiSvyaziBrief from './statistics/pages/UslugiSvyaziBrief';
 import UslugiSvyaziUs741 from './statistics/pages/UslugiSvyaziUs741';
 import ForecastsPage from './statistics/pages/ForecastsPage';
 import ZakupPage from './zakup/pages/ZakupPage';
@@ -20,7 +21,7 @@ import { useAuth } from '../context/AuthContext';
 import '../styles/style.css';
 import HomePage from './HomePage';
 
-type PageId = 'home' | 'statistics' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
+type PageId = 'home' | 'statistics' | 'statistics-brief' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -41,6 +42,7 @@ const App: React.FC = () => {
       <div className="main-content">
         {activePage === 'home' && <HomePage />}
         {activePage === 'statistics' && <UslugiSvyazi />}
+        {activePage === 'statistics-brief' && <UslugiSvyaziBrief />}
         {activePage === 'statistics-us741' && <UslugiSvyaziUs741 />}
         {activePage === 'statistics-forecasts' && <ForecastsPage />}
         {activePage === 'ZAKUP' && <ZakupPage />}

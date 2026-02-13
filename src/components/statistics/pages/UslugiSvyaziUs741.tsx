@@ -273,7 +273,7 @@ const UslugiSvyaziUs741: React.FC = () => {
     <>
       <h2>Услуги связи УС741</h2>
       <div className="table-section budget-planner">
-        <p className="table-description">Ежемесячное планирование расходов по услугам связи</p>
+        <p className="table-description">Ежемесячное планирование расходов по услугам связи (на базе xlsx)</p>
         <div style={{ width: '100%', height: '600px', overflow: 'auto' }} className="grid-wrapper">
           <ReactGrid
             rows={rows}
