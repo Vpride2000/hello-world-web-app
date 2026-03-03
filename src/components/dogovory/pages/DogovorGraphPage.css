@@ -1,0 +1,104 @@
+.graph-description {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+.graph-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.graph-controls label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.apply-btn {
+  padding: 6px 12px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.apply-btn:hover {
+  background-color: #1976d2;
+}
+
+.apply-btn:active {
+  background-color: #1565c0;
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+}
+
+.legend-item {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.legend-item .marker {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  border: 1px solid #999;
+  border-radius: 2px;
+}
+
+.legend-item.active .marker {
+  background-color: #4caf50;
+}
+.legend-item.ending .marker {
+  background-color: #ffeb3b;
+}
+.legend-item.overdue .marker {
+  background-color: #f44336;
+}
+
+.graph-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.graph-table th,
+.graph-table td {
+  border: 1px solid #ddd;
+  padding: 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.graph-table .first-column {
+  text-align: left;
+  background: #fafafa;
+  min-width: 160px;
+}
+
+.cell-active {
+  background-color: #4caf50;
+}
+
+.cell-end {
+  background-color: #ffeb3b;
+}
+.overdue-marker {
+  color: #f44336;
+  font-size: 14px;
+}

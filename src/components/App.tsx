@@ -15,13 +15,14 @@ import MapPage from './map/pages/MapPage';
 import HelpPage from './help/pages/HelpPage';
 import IridiumPage from './help/pages/IridiumPage';
 import DogovorPage from './dogovory/pages/DogovorPage';
+import DogovorGraphPage from './dogovory/pages/DogovorGraphPage';
 import AdminPanel from './admin/pages/AdminPanel';
 import LoginPage from './LoginPage';
 import { useAuth } from '../context/AuthContext';
 import '../styles/style.css';
 import HomePage from './HomePage';
 
-type PageId = 'home' | 'statistics' | 'statistics-brief' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
+type PageId = 'home' | 'statistics' | 'statistics-brief' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'dogovory-graph' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -50,6 +51,7 @@ const App: React.FC = () => {
         {activePage === 'zakup-pen' && <ZakupPen />}
         {activePage === 'zakup-spravochnik' && <ZakupSpravochnik />}
         {activePage === 'dogovory' && <DogovorPage />}
+        {activePage === 'dogovory-graph' && <DogovorGraphPage />}
         {activePage === 'options' && <OptionsPage />}
         {activePage === 'options-tariffs' && <TariffsPage />}
         {activePage === 'map' && <MapPage />}

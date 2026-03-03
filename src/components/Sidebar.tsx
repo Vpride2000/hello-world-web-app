@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 
-type PageId = 'home' | 'statistics' | 'statistics-brief' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
+type PageId = 'home' | 'statistics' | 'statistics-brief' | 'statistics-us741' | 'statistics-forecasts' | 'ZAKUP' | 'zakup-onm' | 'zakup-pen' | 'zakup-spravochnik' | 'dogovory' | 'dogovory-graph' | 'options' | 'options-tariffs' | 'map' | 'help' | 'help-iridium' | 'admin';
 
 interface SidebarProps {
   activePage: PageId;
@@ -79,12 +79,20 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange }) => {
       )}
       
       {isSectionVisible('dogovory') && (
-        <button 
-          className={`sidebar-nav-btn ${activePage === 'dogovory' ? 'active' : ''}`}
-          onClick={() => onPageChange('dogovory')}
-        >
-          Договора
-        </button>
+        <>
+          <button 
+            className={`sidebar-nav-btn ${activePage === 'dogovory' ? 'active' : ''}`}
+            onClick={() => onPageChange('dogovory')}
+          >
+            Договора
+          </button>
+          <button
+            className={`sidebar-sub-btn ${activePage === 'dogovory-graph' ? 'active' : ''}`}
+            onClick={() => onPageChange('dogovory-graph')}
+          >
+            └ График договоров
+          </button>
+        </>
       )}
       
       {isSectionVisible('options') && (
