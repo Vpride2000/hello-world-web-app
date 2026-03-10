@@ -18,7 +18,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@silevis/reactgrid": "^4.1.17",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "dotenv": "^17.2.3",

@@ -78,26 +78,7 @@
   background-color: #e68900;
 }
 
-/* Стилизация таблицы ReactGrid */
-.rg {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-}
-
-.rg-header {
-  background: linear-gradient(180deg, #4CAF50 0%, #388e3c 100%);
-  color: white;
-  font-weight: 600;
-  border-bottom: 2px solid #2e7d32;
-}
-
-.rg-header-cell {
-  background: linear-gradient(180deg, #4CAF50 0%, #388e3c 100%);
-  color: white;
-  font-weight: 600;
-  padding: 12px 8px;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-}
+/* Стилизация таблицы ReactGrid удалена */
 
 .rg-row {
   border-bottom: 1px solid #f0f0f0;
