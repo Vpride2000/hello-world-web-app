@@ -16,13 +16,13 @@ const PORT = Number(process.env.PORT ?? 4000);
 app.use(cors());
 app.use(express.json());
 
+// A simple backend landing response
+app.get('/', (req, res) => {
+  res.type('text/plain').send('это бэкенд!');
+});
+
 // Serve the SPA static files (same public directory as Webpack dev server)
 app.use(express.static(path.join(__dirname, '../public')));
-
-// Primary SPA entrypoint
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-});
 
 // Quick DB health endpoint
 app.get('/api/db-time', async (req, res) => {
