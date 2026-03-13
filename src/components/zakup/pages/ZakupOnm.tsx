@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { getZakupSpravochnik } from '../../../api';
 
 interface TableData {
   [key: string]: string;
@@ -12,6 +13,7 @@ const ZakupOnm: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [originalData, setOriginalData] = useState<TableData[] | null>(null);
   const [suppliers, setSuppliers] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const [onmData, setOnmData] = useState<TableData[]>([
     { col0: 'Оборудование', col1: '150', col2: '250', col3: '200', col4: '180', col5: '220', col6: '120' },
@@ -21,7 +23,18 @@ const ZakupOnm: React.FC = () => {
     { col0: 'Инструменты', col1: '40', col2: '70', col3: '55', col4: '50', col5: '65', col6: '35' },
   ]);
 
-  const loadSuppliers = () => {
+  const loadSuppliers = async () => {
+    try {
+      const response = await getZakupSpravochnik();
+      if (response.success && Array.isArray(response.suppliers)) {
+        setSuppliers(response.suppliers);
+        return;
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    }
+
+    // Fallback to localStorage if API fails
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
@@ -34,6 +47,7 @@ const ZakupOnm: React.FC = () => {
         // ignore invalid storage
       }
     }
+
     setSuppliers([]);
   };
 

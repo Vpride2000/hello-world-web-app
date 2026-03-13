@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import {
+  getSuppliers,
+  saveSuppliers,
+  getCounterparties,
+  saveCounterparties,
+  getContractsDirectory,
+  saveContractsDirectory,
+  SupplierRow,
+  CounterpartyRow,
+  ContractDirectoryRow,
+} from '../../../api';
 
 interface TableData {
   [key: string]: string;
@@ -7,248 +18,317 @@ interface TableData {
 
 const ZakupSpravochnik: React.FC = () => {
   const { canAccess } = useAuth();
-  const STORAGE_KEY = process.env.REACT_APP_STORAGE_KEY_SUPPLIERS || 'spravochnikSuppliers';
-  const COUNTERPARTIES_KEY = process.env.REACT_APP_STORAGE_KEY_COUNTERPARTIES || 'spravochnikCounterparties';
-  const CONTRACTS_KEY = process.env.REACT_APP_STORAGE_KEY_CONTRACTS || 'spravochnikContracts';
-  const DEFAULT_SUPPLIERS = ['Поставщик А', 'Поставщик Б', 'Поставщик В', 'Поставщик Г', 'Поставщик Д'];
-  const DEFAULT_COUNTERPARTIES = ['Контрагент 1', 'Контрагент 2', 'Контрагент 3', 'Контрагент 4', 'Контрагент 5'];
-  const DEFAULT_CONTRACTS = ['Договор 001', 'Договор 002', 'Договор 003', 'Договор 004', 'Договор 005'];
   const canEdit = canAccess('statistics', 'edit');
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [originalData, setOriginalData] = useState<{
-    suppliers: TableData[];
-    counterparties: TableData[];
-    contracts: TableData[];
-  } | null>(null);
 
-  const [spravochnikData, setSpravochnikData] = useState<TableData[]>(
-    DEFAULT_SUPPLIERS.map((name) => ({ col0: name }))
-  );
-  const [counterpartiesData, setCounterpartiesData] = useState<TableData[]>(
-    DEFAULT_COUNTERPARTIES.map((name) => ({ col0: name }))
-  );
-  const [contractsData, setContractsData] = useState<TableData[]>(
-    DEFAULT_CONTRACTS.map((name) => ({ col0: name }))
-  );
+  const [suppliersData, setSuppliersData] = useState<SupplierRow[]>([]);
+  const [counterpartiesData, setCounterpartiesData] = useState<CounterpartyRow[]>([]);
+  const [contractsData, setContractsDirectoryData] = useState<ContractDirectoryRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [isEditModeSuppliers, setIsEditModeSuppliers] = useState(false);
+  const [isEditModeCounterparties, setIsEditModeCounterparties] = useState(false);
+  const [isEditModeContracts, setIsEditModeContracts] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const list = JSON.parse(stored) as string[];
-        if (Array.isArray(list)) {
-          setSpravochnikData(list.map((name) => ({ col0: name })));
-        }
-      } catch {
-        // ignore invalid storage
-      }
-    } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SUPPLIERS));
-    }
+    const loadData = async () => {
+      setLoading(true);
+      setError(null);
 
-    const storedCounterparties = localStorage.getItem(COUNTERPARTIES_KEY);
-    if (storedCounterparties) {
       try {
-        const list = JSON.parse(storedCounterparties) as string[];
-        if (Array.isArray(list)) {
-          setCounterpartiesData(list.map((name) => ({ col0: name })));
-        }
-      } catch {
-        // ignore invalid storage
-      }
-    } else {
-      localStorage.setItem(COUNTERPARTIES_KEY, JSON.stringify(DEFAULT_COUNTERPARTIES));
-    }
+        const [suppliersRes, counterpartiesRes, contractsRes] = await Promise.all([
+          getSuppliers(),
+          getCounterparties(),
+          getContractsDirectory(),
+        ]);
 
-    const storedContracts = localStorage.getItem(CONTRACTS_KEY);
-    if (storedContracts) {
-      try {
-        const list = JSON.parse(storedContracts) as string[];
-        if (Array.isArray(list)) {
-          setContractsData(list.map((name) => ({ col0: name })));
+        if (suppliersRes.success) {
+          setSuppliersData(suppliersRes.rows);
         }
-      } catch {
-        // ignore invalid storage
+        if (counterpartiesRes.success) {
+          setCounterpartiesData(counterpartiesRes.rows);
+        }
+        if (contractsRes.success) {
+          setContractsDirectoryData(contractsRes.rows);
+        }
+      } catch (err) {
+        console.warn('Ошибка загрузки справочников из API:', err);
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      localStorage.setItem(CONTRACTS_KEY, JSON.stringify(DEFAULT_CONTRACTS));
-    }
+    };
+
+    loadData();
   }, []);
 
-  const handleEdit = () => {
-    setOriginalData({
-      suppliers: [...spravochnikData],
-      counterparties: [...counterpartiesData],
-      contracts: [...contractsData],
-    });
-    setIsEditMode(true);
+  const handleAddRowSuppliers = () => {
+    setSuppliersData([...suppliersData, { name: '', contact_info: '' }]);
   };
 
-  const handleSave = () => {
-    setIsEditMode(false);
-    const suppliers = spravochnikData
-      .map((row) => row.col0?.trim())
-      .filter((name) => Boolean(name)) as string[];
-    const counterparties = counterpartiesData
-      .map((row) => row.col0?.trim())
-      .filter((name) => Boolean(name)) as string[];
-    const contracts = contractsData
-      .map((row) => row.col0?.trim())
-      .filter((name) => Boolean(name)) as string[];
-    
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(suppliers));
-    localStorage.setItem(COUNTERPARTIES_KEY, JSON.stringify(counterparties));
-    localStorage.setItem(CONTRACTS_KEY, JSON.stringify(contracts));
-    
-    window.dispatchEvent(new Event('spravochnik-updated'));
-    alert('✅ Данные успешно сохранены!');
-  };
-
-  const handleCancel = () => {
-    if (originalData) {
-      setSpravochnikData([...originalData.suppliers]);
-      setCounterpartiesData([...originalData.counterparties]);
-      setContractsData([...originalData.contracts]);
+  const handleSaveSuppliers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await saveSuppliers(suppliersData);
+      if (response.success) {
+        setSuppliersData(response.rows);
+        setIsEditModeSuppliers(false);
+        alert('✅ Поставщики успешно сохранены!');
+      } else {
+        throw new Error('API вернул неуспешный ответ');
+      }
+    } catch (err) {
+      setError((err as Error).message);
+      alert(`Ошибка при сохранении: ${(err as Error).message}`);
+    } finally {
+      setLoading(false);
     }
-    setIsEditMode(false);
   };
 
-  const handleCellChange = (
-    tableName: 'suppliers' | 'counterparties' | 'contracts',
-    rowIndex: number,
-    colKey: string,
-    value: string
-  ) => {
-    const tableGetters: { [key: string]: TableData[] } = {
-      suppliers: spravochnikData,
-      counterparties: counterpartiesData,
-      contracts: contractsData,
-    };
-    const tableSetters: { [key: string]: (data: TableData[]) => void } = {
-      suppliers: setSpravochnikData,
-      counterparties: setCounterpartiesData,
-      contracts: setContractsData,
-    };
+  const handleCellChangeSuppliers = (index: number, field: keyof SupplierRow, value: string) => {
+    const newData = [...suppliersData];
+    newData[index] = { ...newData[index], [field]: value };
+    setSuppliersData(newData);
+  };
 
-    const newData = [...tableGetters[tableName]];
-    newData[rowIndex][colKey] = value;
-    tableSetters[tableName](newData);
+  const handleAddRowCounterparties = () => {
+    setCounterpartiesData([...counterpartiesData, { name: '', type: '' }]);
+  };
+
+  const handleSaveCounterparties = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await saveCounterparties(counterpartiesData);
+      if (response.success) {
+        setCounterpartiesData(response.rows);
+        setIsEditModeCounterparties(false);
+        alert('✅ Контрагенты успешно сохранены!');
+      } else {
+        throw new Error('API вернул неуспешный ответ');
+      }
+    } catch (err) {
+      setError((err as Error).message);
+      alert(`Ошибка при сохранении: ${(err as Error).message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCellChangeCounterparties = (index: number, field: keyof CounterpartyRow, value: string) => {
+    const newData = [...counterpartiesData];
+    newData[index] = { ...newData[index], [field]: value };
+    setCounterpartiesData(newData);
+  };
+
+  const handleAddRowContracts = () => {
+    setContractsDirectoryData([...contractsData, { type: '', description: '' }]);
+  };
+
+  const handleSaveContracts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await saveContractsDirectory(contractsData);
+      if (response.success) {
+        setContractsDirectoryData(response.rows);
+        setIsEditModeContracts(false);
+        alert('✅ Договоры успешно сохранены!');
+      } else {
+        throw new Error('API вернул неуспешный ответ');
+      }
+    } catch (err) {
+      setError((err as Error).message);
+      alert(`Ошибка при сохранении: ${(err as Error).message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCellChangeContracts = (index: number, field: keyof ContractDirectoryRow, value: string) => {
+    const newData = [...contractsData];
+    newData[index] = { ...newData[index], [field]: value };
+    setContractsDirectoryData(newData);
   };
 
   return (
     <>
-      <h2>Справочник закупок</h2>
+      <h2>Справочники</h2>
+      {error && <p className="error">Ошибка: {error}</p>}
+      {loading && <p>Загрузка...</p>}
+
       <div className="spravochnik-grid">
-        <div className="table-section table-section-narrow">
+        <div className="table-section">
           <h3>Справочник поставщиков</h3>
           <div className="table-container">
             <table className="spravochnik-table">
               <thead>
                 <tr>
-                  <th>Поставщик</th>
+                  <th>Название</th>
+                  <th>Контактная информация</th>
                 </tr>
               </thead>
               <tbody>
-                {spravochnikData.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {Object.keys(row).map((colKey) => (
-                      <td key={colKey}>
-                        {isEditMode && canEdit ? (
-                          <input
-                            type="text"
-                            value={row[colKey]}
-                            onChange={(e) => handleCellChange('suppliers', rowIndex, colKey, e.target.value)}
-                          />
-                        ) : (
-                          row[colKey]
-                        )}
-                      </td>
-                    ))}
+                {suppliersData.map((row, index) => (
+                  <tr key={index}>
+                    <td>
+                      {isEditModeSuppliers && canEdit ? (
+                        <input
+                          type="text"
+                          value={row.name}
+                          onChange={(e) => handleCellChangeSuppliers(index, 'name', e.target.value)}
+                        />
+                      ) : (
+                        row.name
+                      )}
+                    </td>
+                    <td>
+                      {isEditModeSuppliers && canEdit ? (
+                        <input
+                          type="text"
+                          value={row.contact_info}
+                          onChange={(e) => handleCellChangeSuppliers(index, 'contact_info', e.target.value)}
+                        />
+                      ) : (
+                        row.contact_info
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <div className="table-buttons">
+            {canEdit ? (
+              !isEditModeSuppliers ? (
+                <button className="btn-edit" onClick={() => setIsEditModeSuppliers(true)}>Редактировать</button>
+              ) : (
+                <>
+                  <button className="btn-add" onClick={handleAddRowSuppliers}>Добавить строку</button>
+                  <button className="btn-save" onClick={handleSaveSuppliers}>Сохранить в БД</button>
+                  <button className="btn-cancel" onClick={() => setIsEditModeSuppliers(false)}>Отмена</button>
+                </>
+              )
+            ) : (
+              <p className="access-denied">⚠️ У вас нет прав на редактирование этого раздела</p>
+            )}
+          </div>
         </div>
 
-        <div className="table-section table-section-narrow">
+        <div className="table-section">
           <h3>Справочник контрагентов</h3>
           <div className="table-container">
             <table className="spravochnik-table">
               <thead>
                 <tr>
-                  <th>Контрагент</th>
+                  <th>Название</th>
+                  <th>Тип</th>
                 </tr>
               </thead>
               <tbody>
-                {counterpartiesData.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {Object.keys(row).map((colKey) => (
-                      <td key={colKey}>
-                        {isEditMode && canEdit ? (
-                          <input
-                            type="text"
-                            value={row[colKey]}
-                            onChange={(e) => handleCellChange('counterparties', rowIndex, colKey, e.target.value)}
-                          />
-                        ) : (
-                          row[colKey]
-                        )}
-                      </td>
-                    ))}
+                {counterpartiesData.map((row, index) => (
+                  <tr key={index}>
+                    <td>
+                      {isEditModeCounterparties && canEdit ? (
+                        <input
+                          type="text"
+                          value={row.name}
+                          onChange={(e) => handleCellChangeCounterparties(index, 'name', e.target.value)}
+                        />
+                      ) : (
+                        row.name
+                      )}
+                    </td>
+                    <td>
+                      {isEditModeCounterparties && canEdit ? (
+                        <input
+                          type="text"
+                          value={row.type}
+                          onChange={(e) => handleCellChangeCounterparties(index, 'type', e.target.value)}
+                        />
+                      ) : (
+                        row.type
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <div className="table-buttons">
+            {canEdit ? (
+              !isEditModeCounterparties ? (
+                <button className="btn-edit" onClick={() => setIsEditModeCounterparties(true)}>Редактировать</button>
+              ) : (
+                <>
+                  <button className="btn-add" onClick={handleAddRowCounterparties}>Добавить строку</button>
+                  <button className="btn-save" onClick={handleSaveCounterparties}>Сохранить в БД</button>
+                  <button className="btn-cancel" onClick={() => setIsEditModeCounterparties(false)}>Отмена</button>
+                </>
+              )
+            ) : (
+              <p className="access-denied">⚠️ У вас нет прав на редактирование этого раздела</p>
+            )}
+          </div>
         </div>
 
-        <div className="table-section table-section-narrow">
+        <div className="table-section">
           <h3>Справочник договоров</h3>
           <div className="table-container">
             <table className="spravochnik-table">
               <thead>
                 <tr>
-                  <th>Договор</th>
+                  <th>Тип договора</th>
+                  <th>Описание</th>
                 </tr>
               </thead>
               <tbody>
-                {contractsData.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {Object.keys(row).map((colKey) => (
-                      <td key={colKey}>
-                        {isEditMode && canEdit ? (
-                          <input
-                            type="text"
-                            value={row[colKey]}
-                            onChange={(e) => handleCellChange('contracts', rowIndex, colKey, e.target.value)}
-                          />
-                        ) : (
-                          row[colKey]
-                        )}
-                      </td>
-                    ))}
+                {contractsData.map((row, index) => (
+                  <tr key={index}>
+                    <td>
+                      {isEditModeContracts && canEdit ? (
+                        <input
+                          type="text"
+                          value={row.type}
+                          onChange={(e) => handleCellChangeContracts(index, 'type', e.target.value)}
+                        />
+                      ) : (
+                        row.type
+                      )}
+                    </td>
+                    <td>
+                      {isEditModeContracts && canEdit ? (
+                        <input
+                          type="text"
+                          value={row.description}
+                          onChange={(e) => handleCellChangeContracts(index, 'description', e.target.value)}
+                        />
+                      ) : (
+                        row.description
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <div className="table-buttons">
+            {canEdit ? (
+              !isEditModeContracts ? (
+                <button className="btn-edit" onClick={() => setIsEditModeContracts(true)}>Редактировать</button>
+              ) : (
+                <>
+                  <button className="btn-add" onClick={handleAddRowContracts}>Добавить строку</button>
+                  <button className="btn-save" onClick={handleSaveContracts}>Сохранить в БД</button>
+                  <button className="btn-cancel" onClick={() => setIsEditModeContracts(false)}>Отмена</button>
+                </>
+              )
+            ) : (
+              <p className="access-denied">⚠️ У вас нет прав на редактирование этого раздела</p>
+            )}
+          </div>
         </div>
-      </div>
-
-      <div className="table-buttons">
-        {canEdit ? (
-          !isEditMode ? (
-            <button className="btn-edit" onClick={handleEdit}>Редактировать</button>
-          ) : (
-            <>
-              <button className="btn-save" onClick={handleSave}>Сохранить</button>
-              <button className="btn-cancel" onClick={handleCancel}>Отмена</button>
-            </>
-          )
-        ) : (
-          <p className="access-denied">⚠️ У вас нет прав на редактирование этого раздела</p>
-        )}
       </div>
     </>
   );
