@@ -44,8 +44,16 @@ module.exports = {
       directory: path.join(__dirname, 'public'),
     },
     compress: true,
-    port: 3000,
+    port: 3001,
     hot: true,
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:4000',
+        secure: false,
+        changeOrigin: true,
+      },
+    ],
   },
   mode: 'development',
 };
